@@ -1,4 +1,5 @@
 {
 	"token": "", //Fill this out with whatever discord token you have
-	"autorun": true
+	"autorun": true,
+	"tracebackChannel": ""
 } //Make sure to rename this file config.json when it's filled out

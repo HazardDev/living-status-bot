@@ -40,7 +40,7 @@ export class StatBot {
 
             thing.commands.map((command) => {
                 if (message.startsWith(thing.triggerChar) &&
-                    message.substring(thing.triggerChar.length).startsWith(command.name) {
+                    message.substring(thing.triggerChar.length).startsWith(command.name)) {
 
                     try {
                         const response = command.run(user, userID, channelID, message);

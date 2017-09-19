@@ -1,6 +1,5 @@
 import { Client } from "discord.io";
 import * as fs from "fs";
-import { ICommand } from "./commands/command.interface";
 const config = require("./config.json");
 
 interface IStatBotParams {
@@ -11,7 +10,7 @@ interface IStatBotParams {
 export class StatBot {
 
     private client: Client;
-    private commands: ICommand[] = [];
+    private commands: object[] = [];
     private triggerChar: string = "!";
 
     constructor(params: IStatBotParams) {
@@ -21,30 +20,33 @@ export class StatBot {
             console.log("Bot ready!");
         });
 
-        fs.readdirSync("./commands").map(async (fileName: string) => {
+        fs.readdirSync("./commands").map((fileName: string) => {
 
-            if (fileName.indexOf("interface") !== -1) {
-                this.commands.push(await import("./command" + fileName));
+            if (fileName.indexOf("interface") === -1 && fileName.indexOf("map") === -1) {
+                this.commands.push(require("./commands/" + fileName));
             }
 
         });
 
-        this.client.on("message", (user: string, userID: string, channelID: string, message: string) => {
-            console.log("Message received!");
-            console.debug(`User: ${user}                \n
-                           User ID: ${userID}           \n
-                           Channel ID: ${channelID}     \n
-                           Message: ${message}`);
+        const thing = this;
 
-            this.commands.map((command: ICommand) => {
-                if (message.startsWith(this.triggerChar) &&
-                    message.substring(this.triggerChar.length).startsWith(command.name)) {
+        this.client.on("message", (user: string, userID: string, channelID: string, message: string) => {
+
+            if (user === "359469821575954462") { return; }
+
+            // console.log("Message received!");
+            // console.log(`User: ${user}\nUser ID: ${userID}\nChannel ID: ${channelID}\nMessage: ${message}\n\n`);
+            // thing.client.sendMessage({ to: channelID,  message });
+
+            thing.commands.map((command) => {
+                if (message.startsWith(thing.triggerChar) &&
+                    message.substring(thing.triggerChar.length).startsWith(command.name) {
 
                     try {
                         const response = command.run(user, userID, channelID, message);
-                        this.client.sendMessage({ to: channelID, message: response });
+                        thing.client.sendMessage({ to: channelID, message: response });
                      } catch (e) {
-                        this.client.sendMessage({ to: config.tracebackChannel, message: e });
+                        thing.client.sendMessage({ to: config.tracebackChannel, message: e });
                     }
 
                 }

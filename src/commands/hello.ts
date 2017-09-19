@@ -1,11 +1,9 @@
-import { ICommand } from "./command.interface";
+export = {
 
-export class Command implements ICommand {
+    name: "hello",
 
-    public name: string = "hello";
-
-    public run(from, to, text, message): string {
+    run: (from, to, text, message): string => {
         return "Hello, World!";
-    }
+    },
 
 }

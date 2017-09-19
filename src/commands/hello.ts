@@ -2,7 +2,7 @@ export = {
 
     name: "hello",
 
-    run: (from, to, text, message): string => {
+    run: (user: string, userID: string, channelID: string, message: string): string => {
         return "Hello, World!";
     },
 

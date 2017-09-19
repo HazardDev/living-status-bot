@@ -7,10 +7,15 @@ interface IStatBotParams {
     token: string;
 }
 
+interface ICommand {
+    name: string;
+    run(user: string, userID: string, channelID: string, message: string): string;
+}
+
 export class StatBot {
 
     private client: Client;
-    private commands: object[] = [];
+    private commands: ICommand[] = [];
     private triggerChar: string = "!";
 
     constructor(params: IStatBotParams) {

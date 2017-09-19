@@ -1,0 +1,12 @@
+{
+  "name": "living-status-bot",
+  "version": "v0.0.0",
+  "description": "Keep track of some stuff around the house",
+  "main": "index.js",
+  "author": "Logan Saso, Alex Kolstad, Shane Clancy",
+  "license": "MIT",
+  "dependencies": {
+    "discord.io": "^2.5.2",
+    "fs": "^0.0.1-security"
+  }
+}

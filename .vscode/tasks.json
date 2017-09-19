@@ -4,6 +4,7 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"taskName": "Transpile TS Files",
 			"type": "typescript",
 			"tsconfig": "tsconfig.json",
 			"problemMatcher": [
@@ -12,6 +13,22 @@
 			"group": {
 				"kind": "build",
 				"isDefault": true
+			}
+		},
+		{
+			"taskName": "Watch Files for Changes",
+			"type": "shell",
+			"command": "tsc",
+			"args": ["-w"],
+			"problemMatcher": [
+				"$tsc-watch"
+			],
+			"isBackground": true,
+			"presentation": {
+				"echo": true,
+				"reveal": "silent",
+				"focus": false,
+				"panel": "dedicated"
 			}
 		},
 		{
@@ -28,6 +45,16 @@
 				"panel": "new"
 			},
 			"problemMatcher": [] //This is just so it doesn't ask every time
+		},
+		{
+			"taskName": "Copy Config to Output",
+			"type": "shell",
+			"command": "cp",
+			"args": [
+				"src/config.json",
+				"out/"
+			],
+			"problemMatcher": []
 		}
 	]
 }

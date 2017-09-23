@@ -5,9 +5,9 @@
 				"type": "node",
 				"request": "launch",
 				"name": "Launch Program",
-				"program": "${workspaceRoot}\\out\\index.js",
-				"localRoot": "${workspaceRoot}\\out",
-				"cwd": "${workspaceRoot}\\out"
+				"program": "${workspaceRoot}/out/index.js",
+				"localRoot": "${workspaceRoot}/out",
+				"cwd": "${workspaceRoot}/out"
 			}
 		]
 	}

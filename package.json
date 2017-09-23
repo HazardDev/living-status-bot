@@ -6,7 +6,9 @@
   "author": "Logan Saso, Alex Kolstad, Shane Clancy",
   "license": "MIT",
   "dependencies": {
+    "arp-a": "^0.5.2",
     "discord.io": "^2.5.2",
-    "fs": "^0.0.1-security"
+    "fs": "^0.0.1-security",
+    "node-gyp": "^3.6.2"
   }
 }

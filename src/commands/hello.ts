@@ -6,4 +6,8 @@ export = {
         return "Hello, World!";
     },
 
-}
+    start() {
+        return;
+    },
+
+};

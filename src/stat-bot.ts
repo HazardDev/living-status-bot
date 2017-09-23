@@ -10,6 +10,7 @@ interface IStatBotParams {
 interface ICommand {
     name: string;
     run(user: string, userID: string, channelID: string, message: string): string;
+    start(): undefined;
 }
 
 export class StatBot {
@@ -33,6 +34,10 @@ export class StatBot {
 
         });
 
+        this.commands.map((command) => {
+            command.start();
+        }); // Runs the command init step, if needed
+
         const thing = this;
 
         this.client.on("message", (user: string, userID: string, channelID: string, message: string) => {
@@ -46,14 +51,12 @@ export class StatBot {
             thing.commands.map((command) => {
                 if (message.startsWith(thing.triggerChar) &&
                     message.substring(thing.triggerChar.length).startsWith(command.name)) {
-
                     try {
                         const response = command.run(user, userID, channelID, message);
                         thing.client.sendMessage({ to: channelID, message: response });
                      } catch (e) {
                         thing.client.sendMessage({ to: config.tracebackChannel, message: e });
                     }
-
                 }
             });
         });

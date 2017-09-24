@@ -42,7 +42,7 @@ export = {
             }
         }
 
-        return atHome.join(", ");
+        return atHome.length !== 0 ? atHome.join(", ") : "Nobody is home.";
     },
 
     start() {

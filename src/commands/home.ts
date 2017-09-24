@@ -33,8 +33,11 @@ export = {
     run: (user: string, userID: string, channelID: string, message: string): string => {
         const now: number = new Date().getTime();
         const atHome: string[] = [];
+        // tslint:disable-next-line:forin
         for (const person in home) {
+            console.log(`Person entry - ${person} - ${home[person]}`);
             if ((now - home[person]) < (1000 * 60 * 2)) {
+                console.log(`${person} is home!`);
                 atHome.push(person);
             }
         }

@@ -8,13 +8,17 @@ function doScan() {
 
     arpscan({sudo: true})
         .then((results) => {
+            console.log("Finished arpscan.");
             results.map((entry) => {
+                console.log(`Processing entry: ${entry}`);
                 if (Object.keys(macAddresses).indexOf(entry.mac)) {
+                    console.log(`Adding entry: ${entry}`);
                     home[macAddresses[entry.mac]] = new Date().getTime();
                 }
             });
         })
         .catch((error) => {
+            console.log(`Arpscan error: ${error}`);
             throw error;
         });
 
@@ -30,7 +34,7 @@ export = {
         const now: number = new Date().getTime();
         const atHome: string[] = [];
         for (const person in home) {
-            if (now - home[person] < 1000 * 60 * 2) {
+            if ((now - home[person]) < (1000 * 60 * 2)) {
                 atHome.push(person);
             }
         }
@@ -39,6 +43,7 @@ export = {
     },
 
     start() {
+        console.log(`Mac addressed loaded! ${macAddresses}`);
         doScan();
     },
 };

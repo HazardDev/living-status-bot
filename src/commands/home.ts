@@ -1,4 +1,5 @@
 import * as arp from "arp-a";
+import { spawn } from "child_process";
 
 const masks = [
     "100.64.0.",
@@ -29,18 +30,46 @@ const macAddresses = {
 let home: string[] = ["Scanning... Try again soon."];
 
 function doScan() {
-    home = [];
+    const arpDelete = spawn("arp", ["-ad"]);
 
-    arp.table((err, entry) => {
-        if (err) { console.log("Error occurred: " + err); }
-        if (!entry) { return; }
+    arpDelete.stdout.on("data", (data) => { console.log(`stdout (arpdelete): ${data.toString()}`); });
+    arpDelete.stderr.on("data", (data) => { console.error(`stderr (arpdelete): ${data.toString()}`); });
 
-        if (Object.keys(macAddresses).indexOf(entry.mac) !== -1) {
-            home.push(macAddresses[entry.mac]);
-        }
-     });
+    arpDelete.on("close", (code) => {
+        console.debug(`Arp delete finished with status code ${code}`);
+        const ping = spawn("ping", ["-c", "4", "100.64.15.255"]);
 
-    setTimeout(doScan, 1 * 60 * 1000);
+        ping.stdout.on("data", (data) => {
+            console.log(`stdout (ping): ${data.toString()}`);
+
+            // if (data.toString().indexOf("stat") !== -1) {
+            //     console.debug("Ping complete!");
+
+            // }
+        });
+        ping.stderr.on("data", (data) => { console.error(`stderr (ping): ${data.toString()}`); });
+        ping.on("close", (code) => {
+
+            console.debug(`Ping finished with status code ${code}`);
+
+            home = [];
+
+            arp.table((err, entry) => {
+                if (err) { console.log("Error occurred: " + err); }
+                if (!entry) { return; }
+
+                console.debug(`Checking arp entry ${entry.mac}`);
+                if (Object.keys(macAddresses).indexOf(entry.mac) !== -1) {
+                    home.push(macAddresses[entry.mac]);
+                }
+
+            });
+
+            setTimeout(doScan, 1 * 60 * 1000);
+
+        });
+
+    });
 
 }
 
@@ -49,7 +78,7 @@ export = {
     name: "home",
 
     run: (user: string, userID: string, channelID: string, message: string): string => {
-        console.debug(home);
+        home.length !== 0 ? console.debug(home) : console.debug("Home has no entries in it.");
         return home.map((element) =>  element ).join(",");
     },
 

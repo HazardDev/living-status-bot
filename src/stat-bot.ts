@@ -61,5 +61,7 @@ export class StatBot {
             });
         });
 
+        this.client.on("disconnect", () => { this.client.connect(); });
+
     }
 }

@@ -10,10 +10,10 @@ function doScan() {
         .then((results) => {
             console.log("Finished arpscan.");
             results.map((entry) => {
-                console.log(`Processing entry: ${entry}`);
+                console.log(`Processing entry: ${entry.mac}`);
                 if (Object.keys(macAddresses).indexOf(entry.mac.toLowerCase())) {
-                    console.log(`Adding entry: ${entry}`);
-                    home[macAddresses[entry.mac]] = new Date().getTime();
+                    console.log(`Adding entry: ${entry.mac}`);
+                    home[macAddresses[entry.mac.toLowerCase()]] = new Date().getTime();
                 }
             });
         })

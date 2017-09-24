@@ -11,7 +11,7 @@ function doScan() {
             console.log("Finished arpscan.");
             results.map((entry) => {
                 console.log(`Processing entry: ${entry}`);
-                if (Object.keys(macAddresses).indexOf(entry.mac)) {
+                if (Object.keys(macAddresses).indexOf(entry.mac.toLowerCase())) {
                     console.log(`Adding entry: ${entry}`);
                     home[macAddresses[entry.mac]] = new Date().getTime();
                 }

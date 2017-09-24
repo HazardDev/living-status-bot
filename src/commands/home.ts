@@ -1,4 +1,4 @@
-import * as arp from "arp-a";
+import * as arpscan from "arpscan/promise";
 import { spawn } from "child_process";
 
 const masks = [
@@ -30,46 +30,58 @@ const macAddresses = {
 let home: string[] = ["Scanning... Try again soon."];
 
 function doScan() {
-    const arpDelete = spawn("arp", ["-ad"]);
 
-    arpDelete.stdout.on("data", (data) => { console.log(`stdout (arpdelete): ${data.toString()}`); });
-    arpDelete.stderr.on("data", (data) => { console.error(`stderr (arpdelete): ${data.toString()}`); });
-
-    arpDelete.on("close", (code) => {
-        console.debug(`Arp delete finished with status code ${code}`);
-        const ping = spawn("ping", ["-c", "4", "100.64.15.255"]);
-
-        ping.stdout.on("data", (data) => {
-            console.log(`stdout (ping): ${data.toString()}`);
-
-            // if (data.toString().indexOf("stat") !== -1) {
-            //     console.debug("Ping complete!");
-
-            // }
-        });
-        ping.stderr.on("data", (data) => { console.error(`stderr (ping): ${data.toString()}`); });
-        ping.on("close", (code) => {
-
-            console.debug(`Ping finished with status code ${code}`);
-
-            home = [];
-
-            arp.table((err, entry) => {
-                if (err) { console.log("Error occurred: " + err); }
-                if (!entry) { return; }
-
-                console.debug(`Checking arp entry ${entry.mac}`);
-                if (Object.keys(macAddresses).indexOf(entry.mac) !== -1) {
-                    home.push(macAddresses[entry.mac]);
-                }
-
-            });
-
-            setTimeout(doScan, 1 * 60 * 1000);
-
+    arpscan({sudo: true})
+        .then((results) => {
+            console.log(results);
+        })
+        .catch((error) => {
+            console.log(error);
+            throw error;
         });
 
-    });
+    setTimeout(doScan, 1 * 10 * 1000);
+
+    // const arpDelete = spawn("arp", ["-ad"]);
+
+    // arpDelete.stdout.on("data", (data) => { console.log(`stdout (arpdelete): ${data.toString()}`); });
+    // arpDelete.stderr.on("data", (data) => { console.error(`stderr (arpdelete): ${data.toString()}`); });
+
+    // arpDelete.on("close", (code) => {
+    //     console.debug(`Arp delete finished with status code ${code}`);
+    //     const ping = spawn("ping", ["-c", "4", "100.64.15.255"]);
+
+    //     ping.stdout.on("data", (data) => {
+    //         console.log(`stdout (ping): ${data.toString()}`);
+
+    //         // if (data.toString().indexOf("stat") !== -1) {
+    //         //     console.debug("Ping complete!");
+
+    //         // }
+    //     });
+    //     ping.stderr.on("data", (data) => { console.error(`stderr (ping): ${data.toString()}`); });
+    //     ping.on("close", (code) => {
+
+    //         console.debug(`Ping finished with status code ${code}`);
+
+    //         home = [];
+
+    //         arp.table((err, entry) => {
+    //             if (err) { console.log("Error occurred: " + err); }
+    //             if (!entry) { return; }
+
+    //             console.debug(`Checking arp entry ${entry.mac}`);
+    //             if (Object.keys(macAddresses).indexOf(entry.mac) !== -1) {
+    //                 home.push(macAddresses[entry.mac]);
+    //             }
+
+    //         });
+
+    //         setTimeout(doScan, 1 * 60 * 1000);
+
+    //     });
+
+    // });
 
 }
 

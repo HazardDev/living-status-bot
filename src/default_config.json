@@ -1,5 +1,6 @@
 {
 	"token": "", //Fill this out with whatever discord token you have
 	"autorun": true,
-	"tracebackChannel": "" //This is the discord channel id where you want to post tracebacks.
+	"tracebackChannel": "", //This is the discord channel id where you want to post tracebacks.
+	"macAddresses": { } //This should be mac addresses as the key, and the name as the value
 } //Make sure to rename this file config.json when it's filled out
